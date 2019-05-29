@@ -11791,7 +11791,7 @@ Class B. throwing the elbows to the front
 Class C. lifting the dumbbell only halfway
 Class D. lowering the dumbbell only halfway
 Class E. throwing the hips to the front</p>
-<h2 id="Loaing-data">Loaing data<a class="anchor-link" href="#Loaing-data">&#182;</a></h2><p>We use R packages ggplot2 for plotting and caret for implementing our model.</p>
+<h2 id="Loading-data-in-R">Loading data in R<a class="anchor-link" href="#Loading-data-in-R">&#182;</a></h2><p>We use R packages ggplot2 for plotting and caret for implementing our model.</p>
 
 </div>
 </div>
@@ -11804,8 +11804,10 @@ Class E. throwing the hips to the front</p>
 <div class=" highlight hl-r"><pre><span></span><span class="kn">library</span><span class="p">(</span>ggplot2<span class="p">)</span>
 <span class="kn">library</span><span class="p">(</span>caret<span class="p">)</span>
 
-
+<span class="c1">## https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv</span>
 Training <span class="o">&lt;-</span> read.csv<span class="p">(</span>file<span class="o">=</span><span class="s">&quot;pml-training.csv&quot;</span><span class="p">,</span> header<span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> sep<span class="o">=</span><span class="s">&quot;,&quot;</span><span class="p">)</span>
+
+<span class="c1">## https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv</span>
 Testing  <span class="o">&lt;-</span> read.csv<span class="p">(</span>file<span class="o">=</span><span class="s">&quot;pml-testing.csv&quot;</span> <span class="p">,</span> header<span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> sep<span class="o">=</span><span class="s">&quot;,&quot;</span><span class="p">)</span>
 
 <span class="kp">dim</span><span class="p">(</span>Training<span class="p">)</span>
@@ -11901,8 +11903,8 @@ crossvalidation <span class="o">&lt;-</span> Training<span class="p">[</span><sp
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Checking-out-what-we've-got">Checking out what we've got<a class="anchor-link" href="#Checking-out-what-we've-got">&#182;</a></h2><p>A quick investigation using Open Office excell shows that there are many columns that are either empy or filled with "NA".
-These columns are also missing in the Test data we have laoded. Therefore there is no point to use these columsn for training our model. 
+<h2 id="Checking-out-what-we've-got">Checking out what we've got<a class="anchor-link" href="#Checking-out-what-we've-got">&#182;</a></h2><p>A quick investigation using Open Office Excell shows that there are many columns that are either empy or filled with <strong>"NA"</strong> or <strong>#DIV/0!</strong>.</p>
+<p>These columns are also missing in the Test data we have laoded. Therefore there is no point to use these columsn for training our model. 
 Therefore we refine our data sets to only contain the relevant healthy data points.</p>
 
 </div>
@@ -11910,7 +11912,7 @@ Therefore we refine our data sets to only contain the relevant healthy data poin
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="kp">summary</span><span class="p">(</span>training<span class="o">$</span>classe<span class="p">)</span>
@@ -11921,10 +11923,11 @@ Therefore we refine our data sets to only contain the relevant healthy data poin
 all_features <span class="o">=</span> <span class="kp">names</span><span class="p">(</span>training<span class="p">)</span>
 <span class="kr">for</span> <span class="p">(</span>i <span class="kr">in</span> <span class="kp">seq_along</span><span class="p">(</span>all_features<span class="p">))</span> <span class="p">{</span>
     
-    <span class="kp">cat</span><span class="p">(</span><span class="kp">sprintf</span><span class="p">(</span><span class="s">&quot;Quiz #%d \t \&quot;%s\&quot;\n&quot;</span><span class="p">,</span> i<span class="p">,</span> all_features<span class="p">[</span>i<span class="p">]))</span>
+    <span class="kp">cat</span><span class="p">(</span><span class="kp">sprintf</span><span class="p">(</span><span class="s">&quot;Column #%d \t \&quot;%s\&quot;\n&quot;</span><span class="p">,</span> i<span class="p">,</span> all_features<span class="p">[</span>i<span class="p">]))</span>
     
 <span class="p">}</span> 
 
+<span class="c1"># This shows the data types of different columns and example values of first few rows</span>
 str<span class="p">(</span>training<span class="p">)</span>
 </pre></div>
 
@@ -12020,166 +12023,166 @@ str<span class="p">(</span>training<span class="p">)</span>
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Quiz #1 	 &#34;X&#34;
-Quiz #2 	 &#34;user_name&#34;
-Quiz #3 	 &#34;raw_timestamp_part_1&#34;
-Quiz #4 	 &#34;raw_timestamp_part_2&#34;
-Quiz #5 	 &#34;cvtd_timestamp&#34;
-Quiz #6 	 &#34;new_window&#34;
-Quiz #7 	 &#34;num_window&#34;
-Quiz #8 	 &#34;roll_belt&#34;
-Quiz #9 	 &#34;pitch_belt&#34;
-Quiz #10 	 &#34;yaw_belt&#34;
-Quiz #11 	 &#34;total_accel_belt&#34;
-Quiz #12 	 &#34;kurtosis_roll_belt&#34;
-Quiz #13 	 &#34;kurtosis_picth_belt&#34;
-Quiz #14 	 &#34;kurtosis_yaw_belt&#34;
-Quiz #15 	 &#34;skewness_roll_belt&#34;
-Quiz #16 	 &#34;skewness_roll_belt.1&#34;
-Quiz #17 	 &#34;skewness_yaw_belt&#34;
-Quiz #18 	 &#34;max_roll_belt&#34;
-Quiz #19 	 &#34;max_picth_belt&#34;
-Quiz #20 	 &#34;max_yaw_belt&#34;
-Quiz #21 	 &#34;min_roll_belt&#34;
-Quiz #22 	 &#34;min_pitch_belt&#34;
-Quiz #23 	 &#34;min_yaw_belt&#34;
-Quiz #24 	 &#34;amplitude_roll_belt&#34;
-Quiz #25 	 &#34;amplitude_pitch_belt&#34;
-Quiz #26 	 &#34;amplitude_yaw_belt&#34;
-Quiz #27 	 &#34;var_total_accel_belt&#34;
-Quiz #28 	 &#34;avg_roll_belt&#34;
-Quiz #29 	 &#34;stddev_roll_belt&#34;
-Quiz #30 	 &#34;var_roll_belt&#34;
-Quiz #31 	 &#34;avg_pitch_belt&#34;
-Quiz #32 	 &#34;stddev_pitch_belt&#34;
-Quiz #33 	 &#34;var_pitch_belt&#34;
-Quiz #34 	 &#34;avg_yaw_belt&#34;
-Quiz #35 	 &#34;stddev_yaw_belt&#34;
-Quiz #36 	 &#34;var_yaw_belt&#34;
-Quiz #37 	 &#34;gyros_belt_x&#34;
-Quiz #38 	 &#34;gyros_belt_y&#34;
-Quiz #39 	 &#34;gyros_belt_z&#34;
-Quiz #40 	 &#34;accel_belt_x&#34;
-Quiz #41 	 &#34;accel_belt_y&#34;
-Quiz #42 	 &#34;accel_belt_z&#34;
-Quiz #43 	 &#34;magnet_belt_x&#34;
-Quiz #44 	 &#34;magnet_belt_y&#34;
-Quiz #45 	 &#34;magnet_belt_z&#34;
-Quiz #46 	 &#34;roll_arm&#34;
-Quiz #47 	 &#34;pitch_arm&#34;
-Quiz #48 	 &#34;yaw_arm&#34;
-Quiz #49 	 &#34;total_accel_arm&#34;
-Quiz #50 	 &#34;var_accel_arm&#34;
-Quiz #51 	 &#34;avg_roll_arm&#34;
-Quiz #52 	 &#34;stddev_roll_arm&#34;
-Quiz #53 	 &#34;var_roll_arm&#34;
-Quiz #54 	 &#34;avg_pitch_arm&#34;
-Quiz #55 	 &#34;stddev_pitch_arm&#34;
-Quiz #56 	 &#34;var_pitch_arm&#34;
-Quiz #57 	 &#34;avg_yaw_arm&#34;
-Quiz #58 	 &#34;stddev_yaw_arm&#34;
-Quiz #59 	 &#34;var_yaw_arm&#34;
-Quiz #60 	 &#34;gyros_arm_x&#34;
-Quiz #61 	 &#34;gyros_arm_y&#34;
-Quiz #62 	 &#34;gyros_arm_z&#34;
-Quiz #63 	 &#34;accel_arm_x&#34;
-Quiz #64 	 &#34;accel_arm_y&#34;
-Quiz #65 	 &#34;accel_arm_z&#34;
-Quiz #66 	 &#34;magnet_arm_x&#34;
-Quiz #67 	 &#34;magnet_arm_y&#34;
-Quiz #68 	 &#34;magnet_arm_z&#34;
-Quiz #69 	 &#34;kurtosis_roll_arm&#34;
-Quiz #70 	 &#34;kurtosis_picth_arm&#34;
-Quiz #71 	 &#34;kurtosis_yaw_arm&#34;
-Quiz #72 	 &#34;skewness_roll_arm&#34;
-Quiz #73 	 &#34;skewness_pitch_arm&#34;
-Quiz #74 	 &#34;skewness_yaw_arm&#34;
-Quiz #75 	 &#34;max_roll_arm&#34;
-Quiz #76 	 &#34;max_picth_arm&#34;
-Quiz #77 	 &#34;max_yaw_arm&#34;
-Quiz #78 	 &#34;min_roll_arm&#34;
-Quiz #79 	 &#34;min_pitch_arm&#34;
-Quiz #80 	 &#34;min_yaw_arm&#34;
-Quiz #81 	 &#34;amplitude_roll_arm&#34;
-Quiz #82 	 &#34;amplitude_pitch_arm&#34;
-Quiz #83 	 &#34;amplitude_yaw_arm&#34;
-Quiz #84 	 &#34;roll_dumbbell&#34;
-Quiz #85 	 &#34;pitch_dumbbell&#34;
-Quiz #86 	 &#34;yaw_dumbbell&#34;
-Quiz #87 	 &#34;kurtosis_roll_dumbbell&#34;
-Quiz #88 	 &#34;kurtosis_picth_dumbbell&#34;
-Quiz #89 	 &#34;kurtosis_yaw_dumbbell&#34;
-Quiz #90 	 &#34;skewness_roll_dumbbell&#34;
-Quiz #91 	 &#34;skewness_pitch_dumbbell&#34;
-Quiz #92 	 &#34;skewness_yaw_dumbbell&#34;
-Quiz #93 	 &#34;max_roll_dumbbell&#34;
-Quiz #94 	 &#34;max_picth_dumbbell&#34;
-Quiz #95 	 &#34;max_yaw_dumbbell&#34;
-Quiz #96 	 &#34;min_roll_dumbbell&#34;
-Quiz #97 	 &#34;min_pitch_dumbbell&#34;
-Quiz #98 	 &#34;min_yaw_dumbbell&#34;
-Quiz #99 	 &#34;amplitude_roll_dumbbell&#34;
-Quiz #100 	 &#34;amplitude_pitch_dumbbell&#34;
-Quiz #101 	 &#34;amplitude_yaw_dumbbell&#34;
-Quiz #102 	 &#34;total_accel_dumbbell&#34;
-Quiz #103 	 &#34;var_accel_dumbbell&#34;
-Quiz #104 	 &#34;avg_roll_dumbbell&#34;
-Quiz #105 	 &#34;stddev_roll_dumbbell&#34;
-Quiz #106 	 &#34;var_roll_dumbbell&#34;
-Quiz #107 	 &#34;avg_pitch_dumbbell&#34;
-Quiz #108 	 &#34;stddev_pitch_dumbbell&#34;
-Quiz #109 	 &#34;var_pitch_dumbbell&#34;
-Quiz #110 	 &#34;avg_yaw_dumbbell&#34;
-Quiz #111 	 &#34;stddev_yaw_dumbbell&#34;
-Quiz #112 	 &#34;var_yaw_dumbbell&#34;
-Quiz #113 	 &#34;gyros_dumbbell_x&#34;
-Quiz #114 	 &#34;gyros_dumbbell_y&#34;
-Quiz #115 	 &#34;gyros_dumbbell_z&#34;
-Quiz #116 	 &#34;accel_dumbbell_x&#34;
-Quiz #117 	 &#34;accel_dumbbell_y&#34;
-Quiz #118 	 &#34;accel_dumbbell_z&#34;
-Quiz #119 	 &#34;magnet_dumbbell_x&#34;
-Quiz #120 	 &#34;magnet_dumbbell_y&#34;
-Quiz #121 	 &#34;magnet_dumbbell_z&#34;
-Quiz #122 	 &#34;roll_forearm&#34;
-Quiz #123 	 &#34;pitch_forearm&#34;
-Quiz #124 	 &#34;yaw_forearm&#34;
-Quiz #125 	 &#34;kurtosis_roll_forearm&#34;
-Quiz #126 	 &#34;kurtosis_picth_forearm&#34;
-Quiz #127 	 &#34;kurtosis_yaw_forearm&#34;
-Quiz #128 	 &#34;skewness_roll_forearm&#34;
-Quiz #129 	 &#34;skewness_pitch_forearm&#34;
-Quiz #130 	 &#34;skewness_yaw_forearm&#34;
-Quiz #131 	 &#34;max_roll_forearm&#34;
-Quiz #132 	 &#34;max_picth_forearm&#34;
-Quiz #133 	 &#34;max_yaw_forearm&#34;
-Quiz #134 	 &#34;min_roll_forearm&#34;
-Quiz #135 	 &#34;min_pitch_forearm&#34;
-Quiz #136 	 &#34;min_yaw_forearm&#34;
-Quiz #137 	 &#34;amplitude_roll_forearm&#34;
-Quiz #138 	 &#34;amplitude_pitch_forearm&#34;
-Quiz #139 	 &#34;amplitude_yaw_forearm&#34;
-Quiz #140 	 &#34;total_accel_forearm&#34;
-Quiz #141 	 &#34;var_accel_forearm&#34;
-Quiz #142 	 &#34;avg_roll_forearm&#34;
-Quiz #143 	 &#34;stddev_roll_forearm&#34;
-Quiz #144 	 &#34;var_roll_forearm&#34;
-Quiz #145 	 &#34;avg_pitch_forearm&#34;
-Quiz #146 	 &#34;stddev_pitch_forearm&#34;
-Quiz #147 	 &#34;var_pitch_forearm&#34;
-Quiz #148 	 &#34;avg_yaw_forearm&#34;
-Quiz #149 	 &#34;stddev_yaw_forearm&#34;
-Quiz #150 	 &#34;var_yaw_forearm&#34;
-Quiz #151 	 &#34;gyros_forearm_x&#34;
-Quiz #152 	 &#34;gyros_forearm_y&#34;
-Quiz #153 	 &#34;gyros_forearm_z&#34;
-Quiz #154 	 &#34;accel_forearm_x&#34;
-Quiz #155 	 &#34;accel_forearm_y&#34;
-Quiz #156 	 &#34;accel_forearm_z&#34;
-Quiz #157 	 &#34;magnet_forearm_x&#34;
-Quiz #158 	 &#34;magnet_forearm_y&#34;
-Quiz #159 	 &#34;magnet_forearm_z&#34;
-Quiz #160 	 &#34;classe&#34;
+<pre>Column #1 	 &#34;X&#34;
+Column #2 	 &#34;user_name&#34;
+Column #3 	 &#34;raw_timestamp_part_1&#34;
+Column #4 	 &#34;raw_timestamp_part_2&#34;
+Column #5 	 &#34;cvtd_timestamp&#34;
+Column #6 	 &#34;new_window&#34;
+Column #7 	 &#34;num_window&#34;
+Column #8 	 &#34;roll_belt&#34;
+Column #9 	 &#34;pitch_belt&#34;
+Column #10 	 &#34;yaw_belt&#34;
+Column #11 	 &#34;total_accel_belt&#34;
+Column #12 	 &#34;kurtosis_roll_belt&#34;
+Column #13 	 &#34;kurtosis_picth_belt&#34;
+Column #14 	 &#34;kurtosis_yaw_belt&#34;
+Column #15 	 &#34;skewness_roll_belt&#34;
+Column #16 	 &#34;skewness_roll_belt.1&#34;
+Column #17 	 &#34;skewness_yaw_belt&#34;
+Column #18 	 &#34;max_roll_belt&#34;
+Column #19 	 &#34;max_picth_belt&#34;
+Column #20 	 &#34;max_yaw_belt&#34;
+Column #21 	 &#34;min_roll_belt&#34;
+Column #22 	 &#34;min_pitch_belt&#34;
+Column #23 	 &#34;min_yaw_belt&#34;
+Column #24 	 &#34;amplitude_roll_belt&#34;
+Column #25 	 &#34;amplitude_pitch_belt&#34;
+Column #26 	 &#34;amplitude_yaw_belt&#34;
+Column #27 	 &#34;var_total_accel_belt&#34;
+Column #28 	 &#34;avg_roll_belt&#34;
+Column #29 	 &#34;stddev_roll_belt&#34;
+Column #30 	 &#34;var_roll_belt&#34;
+Column #31 	 &#34;avg_pitch_belt&#34;
+Column #32 	 &#34;stddev_pitch_belt&#34;
+Column #33 	 &#34;var_pitch_belt&#34;
+Column #34 	 &#34;avg_yaw_belt&#34;
+Column #35 	 &#34;stddev_yaw_belt&#34;
+Column #36 	 &#34;var_yaw_belt&#34;
+Column #37 	 &#34;gyros_belt_x&#34;
+Column #38 	 &#34;gyros_belt_y&#34;
+Column #39 	 &#34;gyros_belt_z&#34;
+Column #40 	 &#34;accel_belt_x&#34;
+Column #41 	 &#34;accel_belt_y&#34;
+Column #42 	 &#34;accel_belt_z&#34;
+Column #43 	 &#34;magnet_belt_x&#34;
+Column #44 	 &#34;magnet_belt_y&#34;
+Column #45 	 &#34;magnet_belt_z&#34;
+Column #46 	 &#34;roll_arm&#34;
+Column #47 	 &#34;pitch_arm&#34;
+Column #48 	 &#34;yaw_arm&#34;
+Column #49 	 &#34;total_accel_arm&#34;
+Column #50 	 &#34;var_accel_arm&#34;
+Column #51 	 &#34;avg_roll_arm&#34;
+Column #52 	 &#34;stddev_roll_arm&#34;
+Column #53 	 &#34;var_roll_arm&#34;
+Column #54 	 &#34;avg_pitch_arm&#34;
+Column #55 	 &#34;stddev_pitch_arm&#34;
+Column #56 	 &#34;var_pitch_arm&#34;
+Column #57 	 &#34;avg_yaw_arm&#34;
+Column #58 	 &#34;stddev_yaw_arm&#34;
+Column #59 	 &#34;var_yaw_arm&#34;
+Column #60 	 &#34;gyros_arm_x&#34;
+Column #61 	 &#34;gyros_arm_y&#34;
+Column #62 	 &#34;gyros_arm_z&#34;
+Column #63 	 &#34;accel_arm_x&#34;
+Column #64 	 &#34;accel_arm_y&#34;
+Column #65 	 &#34;accel_arm_z&#34;
+Column #66 	 &#34;magnet_arm_x&#34;
+Column #67 	 &#34;magnet_arm_y&#34;
+Column #68 	 &#34;magnet_arm_z&#34;
+Column #69 	 &#34;kurtosis_roll_arm&#34;
+Column #70 	 &#34;kurtosis_picth_arm&#34;
+Column #71 	 &#34;kurtosis_yaw_arm&#34;
+Column #72 	 &#34;skewness_roll_arm&#34;
+Column #73 	 &#34;skewness_pitch_arm&#34;
+Column #74 	 &#34;skewness_yaw_arm&#34;
+Column #75 	 &#34;max_roll_arm&#34;
+Column #76 	 &#34;max_picth_arm&#34;
+Column #77 	 &#34;max_yaw_arm&#34;
+Column #78 	 &#34;min_roll_arm&#34;
+Column #79 	 &#34;min_pitch_arm&#34;
+Column #80 	 &#34;min_yaw_arm&#34;
+Column #81 	 &#34;amplitude_roll_arm&#34;
+Column #82 	 &#34;amplitude_pitch_arm&#34;
+Column #83 	 &#34;amplitude_yaw_arm&#34;
+Column #84 	 &#34;roll_dumbbell&#34;
+Column #85 	 &#34;pitch_dumbbell&#34;
+Column #86 	 &#34;yaw_dumbbell&#34;
+Column #87 	 &#34;kurtosis_roll_dumbbell&#34;
+Column #88 	 &#34;kurtosis_picth_dumbbell&#34;
+Column #89 	 &#34;kurtosis_yaw_dumbbell&#34;
+Column #90 	 &#34;skewness_roll_dumbbell&#34;
+Column #91 	 &#34;skewness_pitch_dumbbell&#34;
+Column #92 	 &#34;skewness_yaw_dumbbell&#34;
+Column #93 	 &#34;max_roll_dumbbell&#34;
+Column #94 	 &#34;max_picth_dumbbell&#34;
+Column #95 	 &#34;max_yaw_dumbbell&#34;
+Column #96 	 &#34;min_roll_dumbbell&#34;
+Column #97 	 &#34;min_pitch_dumbbell&#34;
+Column #98 	 &#34;min_yaw_dumbbell&#34;
+Column #99 	 &#34;amplitude_roll_dumbbell&#34;
+Column #100 	 &#34;amplitude_pitch_dumbbell&#34;
+Column #101 	 &#34;amplitude_yaw_dumbbell&#34;
+Column #102 	 &#34;total_accel_dumbbell&#34;
+Column #103 	 &#34;var_accel_dumbbell&#34;
+Column #104 	 &#34;avg_roll_dumbbell&#34;
+Column #105 	 &#34;stddev_roll_dumbbell&#34;
+Column #106 	 &#34;var_roll_dumbbell&#34;
+Column #107 	 &#34;avg_pitch_dumbbell&#34;
+Column #108 	 &#34;stddev_pitch_dumbbell&#34;
+Column #109 	 &#34;var_pitch_dumbbell&#34;
+Column #110 	 &#34;avg_yaw_dumbbell&#34;
+Column #111 	 &#34;stddev_yaw_dumbbell&#34;
+Column #112 	 &#34;var_yaw_dumbbell&#34;
+Column #113 	 &#34;gyros_dumbbell_x&#34;
+Column #114 	 &#34;gyros_dumbbell_y&#34;
+Column #115 	 &#34;gyros_dumbbell_z&#34;
+Column #116 	 &#34;accel_dumbbell_x&#34;
+Column #117 	 &#34;accel_dumbbell_y&#34;
+Column #118 	 &#34;accel_dumbbell_z&#34;
+Column #119 	 &#34;magnet_dumbbell_x&#34;
+Column #120 	 &#34;magnet_dumbbell_y&#34;
+Column #121 	 &#34;magnet_dumbbell_z&#34;
+Column #122 	 &#34;roll_forearm&#34;
+Column #123 	 &#34;pitch_forearm&#34;
+Column #124 	 &#34;yaw_forearm&#34;
+Column #125 	 &#34;kurtosis_roll_forearm&#34;
+Column #126 	 &#34;kurtosis_picth_forearm&#34;
+Column #127 	 &#34;kurtosis_yaw_forearm&#34;
+Column #128 	 &#34;skewness_roll_forearm&#34;
+Column #129 	 &#34;skewness_pitch_forearm&#34;
+Column #130 	 &#34;skewness_yaw_forearm&#34;
+Column #131 	 &#34;max_roll_forearm&#34;
+Column #132 	 &#34;max_picth_forearm&#34;
+Column #133 	 &#34;max_yaw_forearm&#34;
+Column #134 	 &#34;min_roll_forearm&#34;
+Column #135 	 &#34;min_pitch_forearm&#34;
+Column #136 	 &#34;min_yaw_forearm&#34;
+Column #137 	 &#34;amplitude_roll_forearm&#34;
+Column #138 	 &#34;amplitude_pitch_forearm&#34;
+Column #139 	 &#34;amplitude_yaw_forearm&#34;
+Column #140 	 &#34;total_accel_forearm&#34;
+Column #141 	 &#34;var_accel_forearm&#34;
+Column #142 	 &#34;avg_roll_forearm&#34;
+Column #143 	 &#34;stddev_roll_forearm&#34;
+Column #144 	 &#34;var_roll_forearm&#34;
+Column #145 	 &#34;avg_pitch_forearm&#34;
+Column #146 	 &#34;stddev_pitch_forearm&#34;
+Column #147 	 &#34;var_pitch_forearm&#34;
+Column #148 	 &#34;avg_yaw_forearm&#34;
+Column #149 	 &#34;stddev_yaw_forearm&#34;
+Column #150 	 &#34;var_yaw_forearm&#34;
+Column #151 	 &#34;gyros_forearm_x&#34;
+Column #152 	 &#34;gyros_forearm_y&#34;
+Column #153 	 &#34;gyros_forearm_z&#34;
+Column #154 	 &#34;accel_forearm_x&#34;
+Column #155 	 &#34;accel_forearm_y&#34;
+Column #156 	 &#34;accel_forearm_z&#34;
+Column #157 	 &#34;magnet_forearm_x&#34;
+Column #158 	 &#34;magnet_forearm_y&#34;
+Column #159 	 &#34;magnet_forearm_z&#34;
+Column #160 	 &#34;classe&#34;
 &#39;data.frame&#39;:	13737 obs. of  160 variables:
  $ X                       : int  1 2 3 4 5 6 7 8 9 11 ...
  $ user_name               : Factor w/ 6 levels &#34;adelmo&#34;,&#34;carlitos&#34;,..: 2 2 2 2 2 2 2 2 2 2 ...
@@ -16001,7 +16004,8 @@ Balanced Accuracy      1.0000   1.0000   1.0000   1.0000   1.0000</pre>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Evaluating-the-trained-RF-model-for-the-Cross-Validation-Set">Evaluating the trained RF model for the Cross Validation Set<a class="anchor-link" href="#Evaluating-the-trained-RF-model-for-the-Cross-Validation-Set">&#182;</a></h2><p>As expected the performance of our model is worse (~98%) on the cross validation set. Also, 98% is still a good accuracy. This means that only using the data from the belt sensors would be enough to get good predictions.</p>
+<h2 id="Evaluating-the-trained-RF-model-for-the-Cross-Validation-Set">Evaluating the trained RF model for the Cross Validation Set<a class="anchor-link" href="#Evaluating-the-trained-RF-model-for-the-Cross-Validation-Set">&#182;</a></h2><h3 id="Out-of-sample-error">Out-of-sample error<a class="anchor-link" href="#Out-of-sample-error">&#182;</a></h3><p>As expected the performance of our model is worse (~92%) on the cross validation set. Our model has been overfitted on the training set and explain the training set very well, while its accuracy is worse when we consider a cross validation set.</p>
+<p>In addition, 92% is still a good accuracy. This means that only using the data from the belt sensors would be enough to get good predictions.</p>
 
 </div>
 </div>
@@ -16261,7 +16265,9 @@ Balanced Accuracy      1.0000   1.0000   1.0000   1.0000   1.0000</pre>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Evaluating-RFmodel.all-on-the-cross-validation-set">Evaluating RFmodel.all on the cross-validation set<a class="anchor-link" href="#Evaluating-RFmodel.all-on-the-cross-validation-set">&#182;</a></h2><p>This time, the accouracy is ~99.9% which is of course better than 98% we got using the our first Random Forest model. Our conclusion is that adding more features definitely improves our prediction accuracy.</p>
-<p>This means that for improving accuracy by 2%, we needed to use all ifnroamtion from all sensors. Sometimes adding more sensors is expensive and is not worth the few percent improvment in predictions.</p>
+<p>This means that for improving accuracy by 7%, we needed to use all ifnroamtion from all sensors. 
+Sometimes adding more sensors is expensive and is not worth the few percent improvment in predictions.</p>
+<p>At this point, our model make very good predictions. We performed our training only on the trainign set and only used the cross validation set for evaluating our final model.</p>
 
 </div>
 </div>
